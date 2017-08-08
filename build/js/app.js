@@ -1,0 +1,1 @@
+var ViewModel=function(){this.title=ko.observable("Neighborhood Map")};ko.applyBindings(new ViewModel);

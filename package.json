@@ -1,0 +1,29 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "a simple neighbhor web app using apis and knockout.js",
+  "main": "gulpfile.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riceball1/neighborhood-map.git"
+  },
+  "author": "Dana Ng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/riceball1/neighborhood-map/issues"
+  },
+  "homepage": "https://github.com/riceball1/neighborhood-map#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^3.0.0"
+  }
+}

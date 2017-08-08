@@ -1,0 +1,10 @@
+/* custom styles for neighborhood map*/
+* {
+  box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif; }
+
+.container {
+  margin: 10px auto;
+  padding: 5%; }
