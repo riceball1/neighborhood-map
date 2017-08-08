@@ -1,1 +1,1 @@
-var ViewModel=function(){this.title=ko.observable("Neighborhood Map")};ko.applyBindings(new ViewModel);
+function initMap(){var e={lat:-25.363,lng:131.044},o=new google.maps.Map(document.getElementById("map"),{zoom:4,center:e});new google.maps.Marker({position:e,map:o})}var ViewModel=function(){this.title=ko.observable("Neighborhood Map")};ko.applyBindings(new ViewModel);
