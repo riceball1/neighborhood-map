@@ -19,13 +19,22 @@ ko.applyBindings(new ViewModel());
 Source: https://developers.google.com/maps/documentation/javascript/adding-a-google-map
 */
 function initMap() {
-    var uluru = { lat: -25.363, lng: 131.044 };
+  
     var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        center: uluru
+        center: {lat: 40.7413549, lng: -73.9980244},
+        zoom: 13
     });
+    var uluru = { lat: 40.719526, lng: -74.0089934 };
     var marker = new google.maps.Marker({
         position: uluru,
-        map: map
+        map: map,
+        title: 'First Marker!'
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: 'This is an example of an InfoWindow'
+    });
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
     });
 }
