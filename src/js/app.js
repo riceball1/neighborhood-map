@@ -1,14 +1,9 @@
 /* uses knockout.js */
-
-/** Issue:
-
-Make sure to get this to in the build folder 
- **/
-
 var ViewModel = function() {
-    this.title = ko.observable('Neighborhood Map');
+    this.title = ko.observable('Neighborhood Map: New York City');
 }
 
+// 
 ko.applyBindings(new ViewModel());
 
 
@@ -20,6 +15,7 @@ Source: https://developers.google.com/maps/documentation/javascript/adding-a-goo
 */
 function initMap() {
    // Create a styles array to use with the map.
+   // Code adapted from Udacity videos
         var styles = [
           {
             featureType: 'water',
@@ -100,6 +96,8 @@ function initMap() {
         title: 'First Marker!'
     });
 
+    // change the content based on the marker clicked
+    // use dynamic variables for 'content'
     var infowindow = new google.maps.InfoWindow({
         content: 'This is an example of an InfoWindow'
     });
