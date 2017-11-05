@@ -13,6 +13,9 @@
      },
      {
          name: 'Mina Korean Kitchen'
+     },
+     {
+         name: 'Pokeworks'
      }
  ]
 
