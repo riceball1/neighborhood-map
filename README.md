@@ -1,3 +1,4 @@
+
 # North San Jose Neighborhood Map Project
 
 > Project started June 2017 - November 2017
@@ -8,9 +9,11 @@ Udacity Frontend Nanodegree project using various APIs and Knockout.js to create
 
 ## Getting Started
 
+
 - Checkout app on ![URL](http://www.danafng.com/neighborhood-map/)
 - Click on markers on the map for more information
 - Use search bar to filter map
+
 
 
 ## Technologies Used:
