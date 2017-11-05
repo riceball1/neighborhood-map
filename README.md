@@ -1,4 +1,4 @@
-# San Francisco North San Jose Neighborhood Map Project
+# North San Jose Neighborhood Map Project
 
 > Project started June 2017 - November 2017
 
