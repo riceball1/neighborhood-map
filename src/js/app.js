@@ -2,21 +2,25 @@
 
      {
          name: 'Inchins Bamboo',
-         lat: 37.4023362,
-         long: -122.0100468
+         lat: 37.4024,
+         lng: -121.9400
      },
      {
-         name: 'Starbucks @Rio Robles'
+         name: 'Starbucks @Rio Robles',
+         lat: 37.4064,
+         lng: -121.9418
      },
      {
-         name: 'Honeyberry'
+         name: 'Honeyberry',
+         lat: 37.3006,
+         lng: -121.7717
      },
-     {
-         name: 'Mina Korean Kitchen'
-     },
-     {
-         name: 'Pokeworks'
-     }
+     // {
+     //     name: 'Mina Korean Kitchen'
+     // },
+     // {
+     //     name: 'Pokeworks'
+     // }
  ]
 
 
@@ -56,6 +60,10 @@
  }
 
 
+ /* YELP Fusiion API */
+
+ var clientID = 'yXr9jBZ-VMNuGY-eq7cQyA';
+ var clientSecret = 'IIjg6C0quL38dOTVl6NuXYE1ZXTt7SpUS6YyOfZrqcamj3ziiQ8jis1nLKnekHsv';
 
 
  /** Google Maps API **/
@@ -135,12 +143,43 @@
      // Creates Map
      var map = new google.maps.Map(document.getElementById('map'), {
          // center is North San Jose location
-         center: { lat: 37.4029497, lng: -121.945965 },
+         center: { lat: 37.4029, lng: -121.9437 },
          zoom: 13,
          styles: styles
      });
 
+     
+     // Add markers
+     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
+     function addMarker(place) {
+         this.marker = new google.maps.Marker({
+             position: {lat: place.lat, lng: place.lng},
+             map: map,
+             draggable: true,
+             animation: google.maps.Animation.DROP,
+             title: place.name
+         })
+
+         var infowindow = new google.maps.InfoWindow({
+             content: place.name
+         });
+
+         this.marker.addListener('click', function() {
+          console.log(place.name)
+                 // infowindow.open(map, marker);
+            
+         }
+
+     }
+
+     this.locationList.forEach(function(place) {
+         return addMarker(place)
+     })
  }
+
+
+
+
 
 
  // callback after google maps is successful
