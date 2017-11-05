@@ -5,11 +5,30 @@
 body {
   font-family: Arial, sans-serif; }
 
-.container {
-  margin: 10px auto;
-  padding: 5%; }
-  .container h1 {
-    color: teal; }
+body,
+html {
+  margin-top: 100px; }
+
+.container header {
+  padding: 20px;
+  position: fixed;
+  background-color: white;
+  border-bottom: 1px solid black;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100; }
+
+.container h1 {
+  color: teal;
+  font-size: 1.5em; }
+
+.search-bar {
+  border: 1px solid black;
+  font-size: 1.2em;
+  padding: 20px;
+  width: 100%;
+  color: lightgray; }
 
 #map {
   width: 100%;
