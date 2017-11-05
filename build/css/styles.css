@@ -20,7 +20,7 @@ html {
   z-index: 100; }
 
 .container h1 {
-  color: teal;
+  color: #19a0d8;
   font-size: 1.5em; }
 
 .search-bar {
@@ -30,7 +30,33 @@ html {
   width: 100%;
   color: lightgray; }
 
+#list, #map {
+  float: left;
+  border-radius: 5px; }
+
+#list {
+  width: 30%; }
+
 #map {
-  width: 100%;
-  height: 400px;
-  background-color: grey; }
+  width: 70%; }
+
+#list {
+  background-color: #19a0d8;
+  height: 500px;
+  color: white;
+  border-right: 5px solid white; }
+  #list #results {
+    padding: 0;
+    margin: 0; }
+  #list li {
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: 1px solid white;
+    list-style-type: none;
+    cursor: pointer; }
+    #list li:hover {
+      color: black; }
+
+#map {
+  height: 500px;
+  background-color: gray; }
