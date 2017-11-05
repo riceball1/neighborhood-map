@@ -1,4 +1,6 @@
 /* custom styles for neighborhood map*/
+$water: #19a0d8;
+
 
 * {
     box-sizing: border-box;
@@ -17,8 +19,8 @@ html {
     header {
         padding: 20px;
         position: fixed;
-        background-color: white;
-        border-bottom: 1px solid black;
+        background-color: lightgray;
+        border-bottom: 1px solid gray;
         top: 0;
         right: 0;
         left: 0;
@@ -26,13 +28,13 @@ html {
     }
 
     h1 {
-        color: teal;
+        color: $water;
         font-size: 1.5em;
     }
 }
 
 .search-bar {
-    border: 1px solid black; // margin: 5px auto;
+    border: 1px solid gray; // margin: 5px auto;
     font-size: 1.2em;
     padding: 20px;
     width: 100%;
@@ -40,12 +42,43 @@ html {
 }
 
 
+#list, #map {
+    float: left;
+    border-radius: 5px;
+}
 
+#list {
+    width: 30%;
+}
+
+#map {
+    width: 70%;
+}
+
+#list {
+    background-color: $water;
+    height: 500px;
+    color: white;
+    border-right: 5px solid white;
+    #results {
+        padding: 0;
+        margin: 0;
+    }
+    li {
+        font-weight: bold;
+        padding: 10px;
+        border-bottom: 1px solid white;
+        list-style-type: none;
+        cursor: pointer;
+        &:hover {
+            color: black;
+        }
+    }
+}
 
 
 // Source: https://developers.google.com/maps/documentation/javascript/adding-a-google-map
 #map {
-    width: 100%;
-    height: 400px;
-    background-color: grey;
+    height: 500px;
+    background-color: gray;
 }
