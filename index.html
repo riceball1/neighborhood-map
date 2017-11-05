@@ -6,4 +6,4 @@ SPA featuring a map of a neighborhood that has:
 - listview to support simple browsing of all locations
 - implement 3rd party APIs (e.g. StreetView images, Wikipedia articles, Yelp reviews)
 
- --><div class="container"><h1 data-bind="text: title"></h1><div id="map"></div></div><!-- external scripts --><script src="lib/knockout-3.2.0.js"></script><script src="build/js/app.js"></script><script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmjSgZnSrkRufdC9a694tR-Wq6A-JW79w&callback=initMap" async defer="defer"></script></body></html>
+ --><div class="container"><header><h1 data-bind="text: title"></h1><input type="text" placeholder="narrow what you're looking for" class="search-bar"></header><div id="map"></div></div><!-- external scripts --><script src="lib/knockout-3.2.0.js"></script><script src="build/js/app.js"></script><script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmjSgZnSrkRufdC9a694tR-Wq6A-JW79w&callback=initMap" async defer="defer"></script></body></html>
