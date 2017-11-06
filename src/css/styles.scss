@@ -1,5 +1,6 @@
 /* custom styles for neighborhood map*/
 $water: #19a0d8;
+$redorange: #f25829;
 
 
 * {
@@ -56,9 +57,9 @@ html {
 }
 
 #list {
-    background-color: $water;
+    background-color: lightgray;
     height: 500px;
-    color: white;
+    color: $redorange;
     border-right: 5px solid white;
     #results {
         padding: 0;
@@ -67,7 +68,7 @@ html {
     li {
         font-weight: bold;
         padding: 10px;
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid gray;
         list-style-type: none;
         cursor: pointer;
         &:hover {

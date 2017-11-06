@@ -18,6 +18,7 @@ Udacity Frontend Nanodegree project using various APIs and Knockout.js to create
 - [x] Google Maps API
 - [x] Gulp - Used for development to convert scss to css, minify html + js files (To start use type command `gulp` in terminal)
 - [x] Knockout.js
+- [x] Yelp Fusion API
 
 
 
