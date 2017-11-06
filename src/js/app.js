@@ -148,11 +148,12 @@
          styles: styles
      });
 
-     
+     var map;
+     var infowindow;
      // Add markers
      // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
      function addMarker(place) {
-         this.marker = new google.maps.Marker({
+         marker = new google.maps.Marker({
              position: {lat: place.lat, lng: place.lng},
              map: map,
              draggable: true,
@@ -160,11 +161,11 @@
              title: place.name
          })
 
-         var infowindow = new google.maps.InfoWindow({
+         infowindow = new google.maps.InfoWindow({
              content: place.name
          });
 
-         this.marker.addListener('click', function() {
+         marker.addListener('click', function() {
           console.log(place.name)
                  // infowindow.open(map, marker);
             
