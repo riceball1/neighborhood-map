@@ -150,6 +150,7 @@
 
      var map;
      var infowindow;
+     var marker;
      // Add markers
      // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
      function addMarker(place) {
@@ -172,6 +173,7 @@
          }
 
      }
+ }
 
      this.locationList.forEach(function(place) {
          return addMarker(place)
