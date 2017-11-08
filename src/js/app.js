@@ -169,6 +169,8 @@ function initMap() {
        
 
        marker.addListener('click', function() {
+            // sets content
+            infowindow.setContent('<h1> '+ place.name +' </h1>')
             return infowindow.open(map, marker);
         });
 
@@ -179,14 +181,10 @@ function initMap() {
     starterLocations.forEach(function(location) {
         markers.push(addMarker(location))
     })
-
-    
-    // set content for each marker
-    markers.forEach(function(marker, index) {
-        return infowindow.setContent('<h1> '+ index +' </h1>')
-    })
-
 }
+
+
+
 
 
 
