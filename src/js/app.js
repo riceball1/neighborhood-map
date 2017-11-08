@@ -36,7 +36,6 @@ var starterLocations = [{
 
 var map;
 var infowindow;
-var marker;
 var markers = [];
 
 /* uses knockout.js */
@@ -57,15 +56,12 @@ var ViewModel = function() {
     self.placeList = ko.computed(function() {
         var filter = self.searchTerm().toLowerCase();
         if (!filter) {
-            self.locationList().forEach(function(locationItem) {
-                locationItem.visible(true);
-            });
             return self.locationList();
         } else {
-            return ko.utils.arrayFilter(self.locationList(), function(locationItem) {
-                var string = locationItem.name.toLowerCase();
+            return ko.utils.arrayFilter(self.locationList(), function(location) {
+                var string = location.name.toLowerCase();
                 var result = string.search(filter) >= 0;
-                locationItem.visible(result);
+                location.visible(result);
                 return result;
             });
         }
@@ -137,11 +133,6 @@ function initMap() {
         styles: styles,
     })
 
-    // bounce
-    function bounce() {
-        toggleBounce(this);
-    }
-
     /* YELP Fusiion API */
     function getContent() {
        var clientID = 'yXr9jBZ-VMNuGY-eq7cQyA';
@@ -153,46 +144,48 @@ function initMap() {
         // get API to get business id
         // use business id to get information
 
-
     }
-    
-
 
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
     function addMarker(place) {
         
-        marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
             position: { lat: place.lat, lng: place.lng },
             map: map,
             draggable: false,
             animation: google.maps.Animation.DROP,
             title: place.name,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-            label: place.name[0]
+            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
         })
 
-        // get YELP business information
+          // get YELP business information
         // GET ID from: https://api.yelp.com/v3/businesses/search/phone
         // GET business details: https://api.yelp.com/v3/businesses/{id}
-
-
 
         infowindow = new google.maps.InfoWindow({
             content: ''
         })
+       
 
-        infowindow.setContent('<h1>' + place.name + '</h1>')
-
-        marker.addListener('click', function() {
+       marker.addListener('click', function() {
             return infowindow.open(map, marker);
-        })
+        });
+
+       return marker;
     }
 
     // create each marker
     starterLocations.forEach(function(location) {
-        addMarker(location)
+        markers.push(addMarker(location))
     })
+
+    
+    // set content for each marker
+    markers.forEach(function(marker, index) {
+        return infowindow.setContent('<h1> '+ index +' </h1>')
+    })
+
 }
 
 
