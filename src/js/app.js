@@ -131,16 +131,36 @@ function initMap() {
         center: { lat: 37.4029, lng: -121.9437 },
         zoom: 14,
         styles: styles,
-    })
+    });
 
     /* YELP Fusiion API */
-    function getContent() {
-       var clientID = 'yXr9jBZ-VMNuGY-eq7cQyA';
+    function getContent(place) {
+        console.log('this works')
+        // get YELP business information
+        // GET business details: 
+        var urlDetails = "https://api.yelp.com/v3/businesses/"
+        var clientID = "yXr9jBZ-VMNuGY-eq7cQyA";
         var clientSecret =
-        'IIjg6C0quL38dOTVl6NuXYE1ZXTt7SpUS6YyOfZrqcamj3ziiQ8jis1nLKnekHsv';
+            "IIjg6C0quL38dOTVl6NuXYE1ZXTt7SpUS6YyOfZrqcamj3ziiQ8jis1nLKnekHsv";
 
         // Request access token
-        // fetch()
+        $.ajax({
+                url: "https://api.yelp.com/oauth2/token",
+                method: "POST",
+                data: {
+                    grant_type: "client_credentials",
+                    client_id: clientID,
+                    client_secret: clientSecret
+                },
+                contentType: "application/x-www-form-urlencoded",
+                xhrFields: {
+                    withCredentials: true
+                }
+            })
+            .done(function(response) {
+                console.log('this works', response)
+                return response
+            })
         // get API to get business id
         // use business id to get information
 
@@ -149,7 +169,7 @@ function initMap() {
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
     function addMarker(place) {
-        
+
         var marker = new google.maps.Marker({
             position: { lat: place.lat, lng: place.lng },
             map: map,
@@ -159,22 +179,20 @@ function initMap() {
             icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
         })
 
-          // get YELP business information
-        // GET ID from: https://api.yelp.com/v3/businesses/search/phone
-        // GET business details: https://api.yelp.com/v3/businesses/{id}
-
         infowindow = new google.maps.InfoWindow({
             content: ''
         })
-       
 
-       marker.addListener('click', function() {
+        marker.addListener('click', function() {
+            // get content
+            var content = getContent(place);
+            console.log(content)
             // sets content
-            infowindow.setContent('<h1> '+ place.name +' </h1>')
+            infowindow.setContent('<h1> ' + place.name + ' </h1>')
             return infowindow.open(map, marker);
         });
 
-       return marker;
+        return marker;
     }
 
     // create each marker
