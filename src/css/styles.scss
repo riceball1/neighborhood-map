@@ -59,7 +59,7 @@ html {
 #list {
     background-color: lightgray;
     height: 500px;
-    color: $redorange;
+    color: $water;
     border-right: 5px solid white;
     #results {
         padding: 0;
@@ -82,4 +82,11 @@ html {
 #map {
     height: 500px;
     background-color: gray;
+}
+
+.error-msg {
+    font-size: 1.5em;
+    background-color: red;
+    text-align: center;
+    border: 3px solid darkred;
 }
