@@ -1,42 +1,45 @@
-'use strict';
-
 // Global Variables
-var starterLocations = [{
-        name: "Inchins Bamboo",
-        lat: 37.4024,
-        lng: -121.94,
-        phone: '+14084713322'
-    },
-    {
-        name: "Starbucks @Rio Robles",
-        lat: 37.4064,
-        lng: -121.9418,
-        phone: '+4084359621'
-    },
-    {
-        name: "Halal Gyro Express & Kebabs",
-        lat: 37.4106962,
-        lng: -121.9478167,
-        phone: '+14085260444'
-    },
-    {
-        name: "Mina's Korean Kitchen",
-        lat: 37.4107134,
-        lng: -121.94796,
-        phone: '+14084332270'
 
-    },
-    {
-        name: "Pokeworks",
-        lat: 37.4019867,
-        lng: -121.9400927,
-        phone: '+14089122306'
-    }
-];
+var starterLocations = [];
+
+
+// var starterLocations = [{
+//         name: "Inchins Bamboo",
+//         lat: 37.4024,
+//         lng: -121.94,
+//         phone: '+14084713322'
+//     },
+//     {
+//         name: "Starbucks @Rio Robles",
+//         lat: 37.4064,
+//         lng: -121.9418,
+//         phone: '+4084359621'
+//     },
+//     {
+//         name: "Halal Gyro Express & Kebabs",
+//         lat: 37.4106962,
+//         lng: -121.9478167,
+//         phone: '+14085260444'
+//     },
+//     {
+//         name: "Mina's Korean Kitchen",
+//         lat: 37.4107134,
+//         lng: -121.94796,
+//         phone: '+14084332270'
+
+//     },
+//     {
+//         name: "Pokeworks",
+//         lat: 37.4019867,
+//         lng: -121.9400927,
+//         phone: '+14089122306'
+//     }
+// ];
 
 var map;
 var infowindow;
 var markers = [];
+var content = '';
 
 /* uses knockout.js */
 var ViewModel = function() {
@@ -124,47 +127,44 @@ function initMap() {
             stylers: [{ color: '#efe9e4' }, { lightness: -25 }]
         }
     ];
-
+    var lat = 37.4029;
+    var lng = -121.9437;
     // Creates Map
     var map = new google.maps.Map(document.getElementById('map'), {
         // center is North San Jose location
-        center: { lat: 37.4029, lng: -121.9437 },
+        center: { lat: lat , lng: lng },
         zoom: 14,
         styles: styles,
     });
-
-    /* YELP Fusiion API */
-    function getContent(place) {
-        console.log('this works')
-        // get YELP business information
-        // GET business details: 
-        var urlDetails = "https://api.yelp.com/v3/businesses/"
-        var clientID = "yXr9jBZ-VMNuGY-eq7cQyA";
+    /* FourSquare API */
+    function getVenues() {
+        var clientID = "B343KUQONJOP4GFTIV0G4O3L15JPCIQ4L4FUDNYJMPVI1NTW";
         var clientSecret =
-            "IIjg6C0quL38dOTVl6NuXYE1ZXTt7SpUS6YyOfZrqcamj3ziiQ8jis1nLKnekHsv";
-
+            "CLUHDBPHSRGCZDO3XA3X35YWA5XQMQZIKN11JW0QQENYGM54";
         // Request access token
         $.ajax({
-                url: "https://api.yelp.com/oauth2/token",
-                method: "POST",
-                data: {
-                    grant_type: "client_credentials",
-                    client_id: clientID,
-                    client_secret: clientSecret
-                },
-                contentType: "application/x-www-form-urlencoded",
-                xhrFields: {
-                    withCredentials: true
-                }
+                url: "https://api.foursquare.com2/v2/venues/search?ll=" + lat + ',' + lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + "&v=20171108",
+                method: "GET",
+                dataType: "json"
             })
             .done(function(response) {
-                console.log('this works', response)
-                return response
+
+                starterLocations = response.venues
+                // create each marker
+                starterLocations.forEach(function(location) {
+                    markers.push(addMarker(location))
+                })
+                return response;
+            })
+            .fail(function(error) {
+                // infowindow.setContent('<h1> ' + error.error + ' </h1>');
+                return error;
             })
         // get API to get business id
         // use business id to get information
-
     }
+
+    //infowindow.setContent('<h1> ' + place.name + ' </h1>');
 
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
@@ -185,20 +185,16 @@ function initMap() {
 
         marker.addListener('click', function() {
             // get content
-            var content = getContent(place);
-            console.log(content)
-            // sets content
-            infowindow.setContent('<h1> ' + place.name + ' </h1>')
-            return infowindow.open(map, marker);
+            getContent(place);
+            // open marker with content
+            infowindow.open(map, marker);
         });
 
         return marker;
     }
 
-    // create each marker
-    starterLocations.forEach(function(location) {
-        markers.push(addMarker(location))
-    })
+    // setup venues for map
+    getVenues();
 }
 
 
