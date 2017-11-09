@@ -1,47 +1,13 @@
 // Global Variables
 
 var starterLocations = [];
-
-
-// var starterLocations = [{
-//         name: "Inchins Bamboo",
-//         lat: 37.4024,
-//         lng: -121.94,
-//         phone: '+14084713322'
-//     },
-//     {
-//         name: "Starbucks @Rio Robles",
-//         lat: 37.4064,
-//         lng: -121.9418,
-//         phone: '+4084359621'
-//     },
-//     {
-//         name: "Halal Gyro Express & Kebabs",
-//         lat: 37.4106962,
-//         lng: -121.9478167,
-//         phone: '+14085260444'
-//     },
-//     {
-//         name: "Mina's Korean Kitchen",
-//         lat: 37.4107134,
-//         lng: -121.94796,
-//         phone: '+14084332270'
-
-//     },
-//     {
-//         name: "Pokeworks",
-//         lat: 37.4019867,
-//         lng: -121.9400927,
-//         phone: '+14089122306'
-//     }
-// ];
-
 var map;
 var infowindow;
 var markers = [];
 var content = '';
 var lat = 37.4029;
 var lng = -121.9437;
+var stuff;
 
 /* uses knockout.js */
 var ViewModel = function() {
@@ -49,7 +15,9 @@ var ViewModel = function() {
     self.title = ko.observable('Neighborhood Map: North San Jose in California');
     self.searchTerm = ko.observable('');
     self.locationList = ko.observableArray([]);
-
+    self.errorMsg = ko.observable('There was an error!');
+    self.errorExists = ko.observable(false);
+    
     // add locations to ko observableArray
     starterLocations.map(function(place) {
         self.locationList.push(place);
@@ -62,9 +30,8 @@ var ViewModel = function() {
             return self.locationList();
         } else {
             return ko.utils.arrayFilter(self.locationList(), function(location) {
-                var string = location.name.toLowerCase();
-                var result = string.search(filter) >= 0;
-                location.visible(result);
+                var term = location.name.toLowerCase();
+                var result = term.search(filter) >= 0;
                 return result;
             });
         }
@@ -132,7 +99,7 @@ function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         // center is North San Jose location
         center: { lat: lat, lng: lng },
-        zoom: 14,
+        zoom: 16,
         styles: styles,
     });
     /* FourSquare API */
@@ -148,26 +115,27 @@ function initMap() {
             })
             .done(function(response) {
 
-                starterLocations = response.response.venues.slice(-5)
+                starterLocations = response.response.venues.slice(-10)
                 // initialize knock ViewModel
                 if (starterLocations.length > 0) {
                     // create each marker
                     starterLocations.forEach(function(location) {
                         markers.push(addMarker(location))
                     })
-                    ko.applyBindings(new ViewModel());
                 }
+
+                var vm = new ViewModel();
+                ko.applyBindings(vm);
                 return response;
             })
-            .fail(function(error) {
-                // infowindow.setContent('<h1> ' + error.error + ' </h1>');
-                return error;
+            .fail(function(response) {
+                return response;
             })
         // get API to get business id
         // use business id to get information
     }
 
-  
+
 
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
@@ -181,14 +149,17 @@ function initMap() {
             title: place.name,
             icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
         })
-
         infowindow = new google.maps.InfoWindow({
             content: ''
         })
 
+        var name = place.name;
+        var formattedAddress = place.location.formattedAddress;
+        var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ' + formattedAddress[2]
+
         marker.addListener('click', function() {
             // set content
-              infowindow.setContent('<h1> ' + place.name + ' </h1>' + '<p>' + place.location.formattedAddress + '</p>' + '<p>' + place.contact.formattedPhone + '</p>');
+            infowindow.setContent('<h1> ' + name + ' </h1>' + '<p>' + fullAddress + '</p>');
             // open marker with content
             infowindow.open(map, marker);
         });
@@ -201,9 +172,8 @@ function initMap() {
 }
 
 
-/* CALLBACK after Google Maps API is successful*/
-function runApp() {
-    // initalize map
-    initMap()
+// close error message
 
-}
+$('.error-msg').click(function() {
+    // vm.errorExists = ko.observable(false);
+});

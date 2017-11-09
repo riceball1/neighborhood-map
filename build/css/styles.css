@@ -60,3 +60,9 @@ html {
 #map {
   height: 500px;
   background-color: gray; }
+
+.error-msg {
+  font-size: 1.5em;
+  background-color: red;
+  text-align: center;
+  border: 3px solid darkred; }
