@@ -7,7 +7,6 @@ var markers = [];
 var content = '';
 var lat = 37.4029;
 var lng = -121.9437;
-var errorExists = false;
 
 /** Google Maps API **/
 /* Source: https://developers.google.com/maps/documentation/javascript/adding-a-google-map*/
