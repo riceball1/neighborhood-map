@@ -40,22 +40,22 @@ var map;
 var infowindow;
 var markers = [];
 var content = '';
+var lat = 37.4029;
+var lng = -121.9437;
 
 /* uses knockout.js */
 var ViewModel = function() {
     var self = this;
-
     self.title = ko.observable('Neighborhood Map: North San Jose in California');
-
     self.searchTerm = ko.observable('');
-
-
     self.locationList = ko.observableArray([]);
 
+    // add locations to ko observableArray
     starterLocations.map(function(place) {
         self.locationList.push(place);
     });
 
+    // filters places
     self.placeList = ko.computed(function() {
         var filter = self.searchTerm().toLowerCase();
         if (!filter) {
@@ -127,12 +127,11 @@ function initMap() {
             stylers: [{ color: '#efe9e4' }, { lightness: -25 }]
         }
     ];
-    var lat = 37.4029;
-    var lng = -121.9437;
+
     // Creates Map
     var map = new google.maps.Map(document.getElementById('map'), {
         // center is North San Jose location
-        center: { lat: lat , lng: lng },
+        center: { lat: lat, lng: lng },
         zoom: 14,
         styles: styles,
     });
@@ -143,17 +142,21 @@ function initMap() {
             "CLUHDBPHSRGCZDO3XA3X35YWA5XQMQZIKN11JW0QQENYGM54";
         // Request access token
         $.ajax({
-                url: "https://api.foursquare.com2/v2/venues/search?ll=" + lat + ',' + lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + "&v=20171108",
+                url: "https://api.foursquare.com/v2/venues/search?ll=" + lat + ',' + lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + "&v=20171108",
                 method: "GET",
                 dataType: "json"
             })
             .done(function(response) {
 
-                starterLocations = response.venues
-                // create each marker
-                starterLocations.forEach(function(location) {
-                    markers.push(addMarker(location))
-                })
+                starterLocations = response.response.venues.slice(-5)
+                // initialize knock ViewModel
+                if (starterLocations.length > 0) {
+                    // create each marker
+                    starterLocations.forEach(function(location) {
+                        markers.push(addMarker(location))
+                    })
+                    ko.applyBindings(new ViewModel());
+                }
                 return response;
             })
             .fail(function(error) {
@@ -164,14 +167,14 @@ function initMap() {
         // use business id to get information
     }
 
-    //infowindow.setContent('<h1> ' + place.name + ' </h1>');
+  
 
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
     function addMarker(place) {
 
         var marker = new google.maps.Marker({
-            position: { lat: place.lat, lng: place.lng },
+            position: { lat: place.location.lat, lng: place.location.lng },
             map: map,
             draggable: false,
             animation: google.maps.Animation.DROP,
@@ -184,8 +187,8 @@ function initMap() {
         })
 
         marker.addListener('click', function() {
-            // get content
-            getContent(place);
+            // set content
+              infowindow.setContent('<h1> ' + place.name + ' </h1>' + '<p>' + place.location.formattedAddress + '</p>' + '<p>' + place.contact.formattedPhone + '</p>');
             // open marker with content
             infowindow.open(map, marker);
         });
@@ -198,14 +201,9 @@ function initMap() {
 }
 
 
-
-
-
-
 /* CALLBACK after Google Maps API is successful*/
 function runApp() {
     // initalize map
     initMap()
-    // initialize knock ViewModel
-    ko.applyBindings(new ViewModel())
+
 }
