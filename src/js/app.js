@@ -7,40 +7,9 @@ var markers = [];
 var content = '';
 var lat = 37.4029;
 var lng = -121.9437;
-var stuff;
-
-/* uses knockout.js */
-var ViewModel = function() {
-    var self = this;
-    self.title = ko.observable('Neighborhood Map: North San Jose in California');
-    self.searchTerm = ko.observable('');
-    self.locationList = ko.observableArray([]);
-    self.errorMsg = ko.observable('There was an error!');
-    self.errorExists = ko.observable(false);
-    
-    // add locations to ko observableArray
-    starterLocations.map(function(place) {
-        self.locationList.push(place);
-    });
-
-    // filters places
-    self.placeList = ko.computed(function() {
-        var filter = self.searchTerm().toLowerCase();
-        if (!filter) {
-            return self.locationList();
-        } else {
-            return ko.utils.arrayFilter(self.locationList(), function(location) {
-                var term = location.name.toLowerCase();
-                var result = term.search(filter) >= 0;
-                return result;
-            });
-        }
-    }, self);
-};
-
+var errorExists = false;
 
 /** Google Maps API **/
-
 /* Source: https://developers.google.com/maps/documentation/javascript/adding-a-google-map*/
 function initMap() {
     // Create a styles array to use with the map.
@@ -99,7 +68,7 @@ function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         // center is North San Jose location
         center: { lat: lat, lng: lng },
-        zoom: 16,
+        zoom: 13,
         styles: styles,
     });
     /* FourSquare API */
@@ -114,33 +83,29 @@ function initMap() {
                 dataType: "json"
             })
             .done(function(response) {
-
-                starterLocations = response.response.venues.slice(-10)
-                // initialize knock ViewModel
+                // limit to 10 venues
+                starterLocations = response.response.venues.slice(-10);
                 if (starterLocations.length > 0) {
                     // create each marker
                     starterLocations.forEach(function(location) {
                         markers.push(addMarker(location))
                     })
                 }
-
+                // start up ko viewmodel
                 var vm = new ViewModel();
                 ko.applyBindings(vm);
                 return response;
             })
             .fail(function(response) {
+                handleErrors();
                 return response;
             })
-        // get API to get business id
-        // use business id to get information
     }
-
-
 
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
     function addMarker(place) {
-
+        this.visible = ko.observable(true);
         var marker = new google.maps.Marker({
             position: { lat: place.location.lat, lng: place.location.lng },
             map: map,
@@ -153,9 +118,20 @@ function initMap() {
             content: ''
         })
 
+        // make marker visible/invisible
+        toggleMarker = ko.computed(function() {
+            if (this.visible() === true) {
+                marker.setMap(map);
+            } else {
+                marker.setMap(null);
+            }
+            return true;
+        }, this);
+
         var name = place.name;
         var formattedAddress = place.location.formattedAddress;
         var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ' + formattedAddress[2]
+
 
         marker.addListener('click', function() {
             // set content
@@ -167,13 +143,38 @@ function initMap() {
         return marker;
     }
 
+
+    /* uses knockout.js */
+    var ViewModel = function() {
+        var self = this;
+        self.title = ko.observable('Neighborhood Map: North San Jose in California');
+        self.searchTerm = ko.observable('');
+        self.locationList = ko.observableArray([]);
+
+        // add locations to ko observableArray
+        starterLocations.map(function(place) {
+            self.locationList.push(place);
+        });
+
+        // filters places
+        self.placeList = ko.computed(function() {
+            var filter = self.searchTerm().toLowerCase();
+            if (!filter) {
+                return self.locationList();
+            } else {
+                return ko.utils.arrayFilter(self.locationList(), function(location) {
+                    var term = location.name.toLowerCase();
+                    var result = term.search(filter) >= 0;
+                    location.visible = result;
+                    return result;
+                });
+            }
+        }, self);
+    };
     // setup venues for map
     getVenues();
 }
 
-
-// close error message
-
-$('.error-msg').click(function() {
-    // vm.errorExists = ko.observable(false);
-});
+function handleErrors() {
+    $('.error-msg').css('display', 'block');
+}
