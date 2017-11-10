@@ -103,6 +103,18 @@ function initMap() {
             });
     }
 
+    /* Google Maps Animate  Marker
+    Source: https://developers.google.com/maps/documentation/javascript/examples/marker-animations */
+
+
+    function toggleBounce(marker) {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+      }
+
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
     function addMarker(place) {
@@ -120,12 +132,15 @@ function initMap() {
             content: ''
         });
 
+        // NOTE: add alternative in case data comes back undefined/empty
         var name = place.name;
         var formattedAddress = place.location.formattedAddress;
-        var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ' + formattedAddress[2];
+        var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ';
 
 
         marker.addListener('click', function() {
+            // animation
+            toggleBounce(this);
             // set content
             infowindow.setContent('<h1> ' + name + ' </h1>' + '<p>' + fullAddress + '</p>');
             // open marker with content
@@ -134,6 +149,8 @@ function initMap() {
 
         return marker;
     }
+
+
 
 
     /* uses knockout.js */
