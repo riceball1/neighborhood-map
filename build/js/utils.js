@@ -37,11 +37,20 @@
 
 
  function toggleBounce(marker) {
+    // close all animations 
+    // turnMarkersOffop;   (markers);
      if (marker.getAnimation() !== null) {
          marker.setAnimation(null);
      } else {
          marker.setAnimation(google.maps.Animation.BOUNCE);
+         infowindow.open(map, marker);
      }
+
+     // stop animations after a certain time
+     setTimeout(function() {
+            marker.setAnimation(null);
+            infowindow.close(map, marker);
+         }, 3000);
  }
 
  // Add markers
@@ -76,5 +85,19 @@
          infowindow.open(map, marker);
      });
 
+
      return marker;
  }
+
+
+/* Source: https://hashnode.com/post/google-maps-api-onclick-on-marker-close-infowindow-of-other-markers-ciou68dw708x33353les71nyi */
+
+//  function turnMakersOff(markers) {
+//    markers.forEach(function(marker) {
+//     // stop animations
+//     marker.setAnimation(null);
+
+//     // close info window
+//     infowindow.close(map, marker);
+//   }); 
+// }
