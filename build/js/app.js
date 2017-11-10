@@ -125,7 +125,7 @@ function initMap() {
             draggable: false,
             animation: google.maps.Animation.DROP,
             title: place.name,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
         });
 
         infowindow = new google.maps.InfoWindow({
