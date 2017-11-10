@@ -117,11 +117,11 @@ function initMap() {
         })
         infowindow = new google.maps.InfoWindow({
             content: ''
-        })
+        });
 
         var name = place.name;
         var formattedAddress = place.location.formattedAddress;
-        var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ' + formattedAddress[2]
+        var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ' + formattedAddress[2];
 
 
         marker.addListener('click', function() {
