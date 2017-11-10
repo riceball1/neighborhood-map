@@ -9,6 +9,10 @@ Udacity Frontend Nanodegree project using various APIs and Knockout.js to create
 3. Use search bar at top to filter map
 4. Enjoy this simple map app!
 
+### How to Use Gulp Build Tool 
+
+- If you want to use the Gulp build tool, you just need to `cd` into the project folder and then run `gulp`, but it is only needed if you want to run any changes after modifying items in the `src` folder
+
 
 ## Technologies Used:
 - [x] Google Maps API
