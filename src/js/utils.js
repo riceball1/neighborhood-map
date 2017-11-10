@@ -49,8 +49,7 @@
      // stop animations after a certain time
      setTimeout(function() {
             marker.setAnimation(null);
-            infowindow.close(map, marker);
-         }, 3000);
+         }, 2100); // bounces 3 times
  }
 
  // Add markers
