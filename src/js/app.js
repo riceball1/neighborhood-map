@@ -133,10 +133,10 @@ function initMap() {
         });
 
         // NOTE: add alternative in case data comes back undefined/empty
-        var name = place.name;
+        var name = place.name || 'no place name';
         var formattedAddress = place.location.formattedAddress;
-        var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ';
-
+        var fullAddress = formattedAddress.join(',');
+    
 
         marker.addListener('click', function() {
             // animation
