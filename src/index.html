@@ -24,9 +24,7 @@ SPA featuring a map of a neighborhood that has:
             <h1 data-bind="text: title"></h1>
             <input type="text" data-bind="textInput:searchTerm" placeholder="narrow what you're looking for" class="search-bar" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'">
         </header>
-        <div class="error-msg" data-bind="if: errorExists">
-            <p data-bind="text: errorMsg"></p>
-        </div>
+        <div class="error-msg">There was an error with getting venues</div>
         <div class="list" id="list">
             <ul class="results" id="results" data-bind="foreach: placeList">
                 <li class="place" data-bind="text: name"></li>
@@ -39,6 +37,7 @@ SPA featuring a map of a neighborhood that has:
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="build/js/app.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmjSgZnSrkRufdC9a694tR-Wq6A-JW79w&callback=initMap" async defer></script>
+
 </body>
 
 </html>

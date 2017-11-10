@@ -7,40 +7,10 @@ var markers = [];
 var content = '';
 var lat = 37.4029;
 var lng = -121.9437;
-var stuff;
-
-/* uses knockout.js */
-var ViewModel = function() {
-    var self = this;
-    self.title = ko.observable('Neighborhood Map: North San Jose in California');
-    self.searchTerm = ko.observable('');
-    self.locationList = ko.observableArray([]);
-    self.errorMsg = ko.observable('There was an error!');
-    self.errorExists = ko.observable(false);
-    
-    // add locations to ko observableArray
-    starterLocations.map(function(place) {
-        self.locationList.push(place);
-    });
-
-    // filters places
-    self.placeList = ko.computed(function() {
-        var filter = self.searchTerm().toLowerCase();
-        if (!filter) {
-            return self.locationList();
-        } else {
-            return ko.utils.arrayFilter(self.locationList(), function(location) {
-                var term = location.name.toLowerCase();
-                var result = term.search(filter) >= 0;
-                return result;
-            });
-        }
-    }, self);
-};
-
+var map;
+var tempArr;
 
 /** Google Maps API **/
-
 /* Source: https://developers.google.com/maps/documentation/javascript/adding-a-google-map*/
 function initMap() {
     // Create a styles array to use with the map.
@@ -96,10 +66,10 @@ function initMap() {
     ];
 
     // Creates Map
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         // center is North San Jose location
         center: { lat: lat, lng: lng },
-        zoom: 16,
+        zoom: 13,
         styles: styles,
     });
     /* FourSquare API */
@@ -114,28 +84,24 @@ function initMap() {
                 dataType: "json"
             })
             .done(function(response) {
-
-                starterLocations = response.response.venues.slice(-10)
-                // initialize knock ViewModel
+                // limit to 10 venues
+                starterLocations = response.response.venues.slice(-10);
                 if (starterLocations.length > 0) {
                     // create each marker
                     starterLocations.forEach(function(location) {
                         markers.push(addMarker(location))
                     })
                 }
-
+                // start up ko viewmodel
                 var vm = new ViewModel();
                 ko.applyBindings(vm);
                 return response;
             })
             .fail(function(response) {
+                handleErrors();
                 return response;
             })
-        // get API to get business id
-        // use business id to get information
     }
-
-
 
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
@@ -157,6 +123,7 @@ function initMap() {
         var formattedAddress = place.location.formattedAddress;
         var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ' + formattedAddress[2]
 
+
         marker.addListener('click', function() {
             // set content
             infowindow.setContent('<h1> ' + name + ' </h1>' + '<p>' + fullAddress + '</p>');
@@ -167,13 +134,66 @@ function initMap() {
         return marker;
     }
 
+
+    /* uses knockout.js */
+    var ViewModel = function() {
+        var self = this;
+        self.title = ko.observable('Neighborhood Map: North San Jose in California');
+        self.searchTerm = ko.observable('');
+        self.locationList = ko.observableArray([]);
+
+        // add locations to ko observableArray
+        starterLocations.map(function(place) {
+            self.locationList.push(place);
+        });
+
+        // filters places
+        self.placeList = ko.computed(function() {
+            var filter = self.searchTerm().toLowerCase();
+            if (!filter) {
+
+                // restore all markers
+                markers.forEach(function(marker) {
+                    return marker.setMap(map);
+                })
+
+                // reset the entire placeList
+                return self.locationList();
+            } else {
+                tempArr = ko.utils.arrayFilter(self.locationList(), function(location) {
+                    var term = location.name.toLowerCase();
+                    var result = term.search(filter) >= 0;
+                    return result;
+                });
+
+                setNewMarkers(tempArr);
+                return tempArr;
+            }
+        }, self);
+    };
     // setup venues for map
     getVenues();
+
+    function setNewMarkers(markersArr) {
+        // filter the markers 
+        var filteredArr = markers.filter(function(marker) {
+            for(var i = 0; i < tempArr.length; i++) {
+                return tempArr[i].name === marker.title;
+            }
+        })
+        // clear all markers first
+        markers.forEach(function(marker) {
+            return marker.setMap(null);
+        })
+        // recreate new markers from filtered arr
+        return filteredArr.forEach(function(item) {
+            return item.setMap(map);
+        })
+    }
 }
 
 
-// close error message
 
-$('.error-msg').click(function() {
-    // vm.errorExists = ko.observable(false);
-});
+function handleErrors() {
+    $('.error-msg').css('display', 'block');
+}
