@@ -7,6 +7,8 @@ var markers = [];
 var content = '';
 var lat = 37.4029;
 var lng = -121.9437;
+var map;
+var tempArr;
 
 /** Google Maps API **/
 /* Source: https://developers.google.com/maps/documentation/javascript/adding-a-google-map*/
@@ -64,7 +66,7 @@ function initMap() {
     ];
 
     // Creates Map
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         // center is North San Jose location
         center: { lat: lat, lng: lng },
         zoom: 13,
@@ -104,7 +106,7 @@ function initMap() {
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
     function addMarker(place) {
-        this.visible = ko.observable(true);
+
         var marker = new google.maps.Marker({
             position: { lat: place.location.lat, lng: place.location.lng },
             map: map,
@@ -116,16 +118,6 @@ function initMap() {
         infowindow = new google.maps.InfoWindow({
             content: ''
         })
-
-        // make marker visible/invisible
-        toggleMarker = ko.computed(function() {
-            if (this.visible() === true) {
-                marker.setMap(map);
-            } else {
-                marker.setMap(null);
-            }
-            return true;
-        }, this);
 
         var name = place.name;
         var formattedAddress = place.location.formattedAddress;
@@ -159,20 +151,48 @@ function initMap() {
         self.placeList = ko.computed(function() {
             var filter = self.searchTerm().toLowerCase();
             if (!filter) {
+
+                // restore all markers
+                markers.forEach(function(marker) {
+                    return marker.setMap(map);
+                })
+
+                // reset the entire placeList
                 return self.locationList();
             } else {
-                return ko.utils.arrayFilter(self.locationList(), function(location) {
+                tempArr = ko.utils.arrayFilter(self.locationList(), function(location) {
                     var term = location.name.toLowerCase();
                     var result = term.search(filter) >= 0;
-                    location.visible = result;
                     return result;
                 });
+
+                setNewMarkers(tempArr);
+                return tempArr;
             }
         }, self);
     };
     // setup venues for map
     getVenues();
+
+    function setNewMarkers(markersArr) {
+        // filter the markers 
+        var filteredArr = markers.filter(function(marker) {
+            for(var i = 0; i < tempArr.length; i++) {
+                return tempArr[i].name === marker.title;
+            }
+        })
+        // clear all markers first
+        markers.forEach(function(marker) {
+            return marker.setMap(null);
+        })
+        // recreate new markers from filtered arr
+        return filteredArr.forEach(function(item) {
+            return item.setMap(map);
+        })
+    }
 }
+
+
 
 function handleErrors() {
     $('.error-msg').css('display', 'block');
