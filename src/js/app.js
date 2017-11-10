@@ -89,8 +89,8 @@ function initMap() {
                 if (starterLocations.length > 0) {
                     // create each marker
                     starterLocations.forEach(function(location) {
-                        markers.push(addMarker(location))
-                    })
+                        markers.push(addMarker(location));
+                    });
                 }
                 // start up ko viewmodel
                 var vm = new ViewModel();
@@ -100,7 +100,7 @@ function initMap() {
             .fail(function(response) {
                 handleErrors();
                 return response;
-            })
+            });
     }
 
     // Add markers
@@ -114,7 +114,8 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             title: place.name,
             icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-        })
+        });
+
         infowindow = new google.maps.InfoWindow({
             content: ''
         });
@@ -155,7 +156,7 @@ function initMap() {
                 // restore all markers
                 markers.forEach(function(marker) {
                     return marker.setMap(map);
-                })
+                });
 
                 // reset the entire placeList
                 return self.locationList();
@@ -180,15 +181,15 @@ function initMap() {
             for(var i = 0; i < tempArr.length; i++) {
                 return tempArr[i].name === marker.title;
             }
-        })
+        });
         // clear all markers first
         markers.forEach(function(marker) {
             return marker.setMap(null);
-        })
+        });
         // recreate new markers from filtered arr
         return filteredArr.forEach(function(item) {
             return item.setMap(map);
-        })
+        });
     }
 }
 
