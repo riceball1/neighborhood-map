@@ -109,11 +109,11 @@ function initMap() {
 
     function toggleBounce(marker) {
         if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
+            marker.setAnimation(null);
         } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE);
+            marker.setAnimation(google.maps.Animation.BOUNCE);
         }
-      }
+    }
 
     // Add markers
     // Source code: https://www.youtube.com/watch?v=Zxf1mnP5zcw
@@ -136,7 +136,7 @@ function initMap() {
         var name = place.name || 'no place name';
         var formattedAddress = place.location.formattedAddress;
         var fullAddress = formattedAddress.join(',');
-    
+
 
         marker.addListener('click', function() {
             // animation
@@ -164,6 +164,20 @@ function initMap() {
         starterLocations.map(function(place) {
             self.locationList.push(place);
         });
+
+        // adds click to each list item:
+        self.click = function(location) {
+            // identifies the particular marker
+            var index = self.locationList.indexOf(location);
+            // bounces the marker
+            toggleBounce(markers[index]);
+            // pans to the marker
+            map.panTo(markers[index].position);
+            // opens info window
+            // open marker with content
+            infowindow.open(map, markers[index]);
+        };
+
 
         // filters places
         self.placeList = ko.computed(function() {
@@ -195,7 +209,7 @@ function initMap() {
     function setNewMarkers(markersArr) {
         // filter the markers 
         var filteredArr = markers.filter(function(marker) {
-            for(var i = 0; i < tempArr.length; i++) {
+            for (var i = 0; i < tempArr.length; i++) {
                 return tempArr[i].name === marker.title;
             }
         });

@@ -27,7 +27,7 @@ SPA featuring a map of a neighborhood that has:
         <div class="error-msg">There was an error with getting venues</div>
         <div class="list" id="list">
             <ul class="results" id="results" data-bind="foreach: placeList">
-                <li class="place" data-bind="text: name"></li>
+                <li class="place" data-bind="text: name, click:$parent.click"></li>
             </ul>
         </div>
         <div id="map">Something Went Wrong with Google Maps</div>
