@@ -89,8 +89,8 @@ function initMap() {
                 if (starterLocations.length > 0) {
                     // create each marker
                     starterLocations.forEach(function(location) {
-                        markers.push(addMarker(location))
-                    })
+                        markers.push(addMarker(location));
+                    });
                 }
                 // start up ko viewmodel
                 var vm = new ViewModel();
@@ -100,7 +100,19 @@ function initMap() {
             .fail(function(response) {
                 handleErrors();
                 return response;
-            })
+            });
+    }
+
+    /* Google Maps Animate  Marker
+    Source: https://developers.google.com/maps/documentation/javascript/examples/marker-animations */
+
+
+    function toggleBounce(marker) {
+        if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
     }
 
     // Add markers
@@ -114,17 +126,21 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             title: place.name,
             icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-        })
+        });
+
         infowindow = new google.maps.InfoWindow({
             content: ''
-        })
+        });
 
-        var name = place.name;
+        // NOTE: add alternative in case data comes back undefined/empty
+        var name = place.name || 'no place name';
         var formattedAddress = place.location.formattedAddress;
-        var fullAddress = formattedAddress[0] + ' <br/> ' + formattedAddress[1] + '  <br/> ' + formattedAddress[2]
+        var fullAddress = formattedAddress.join(',');
 
 
         marker.addListener('click', function() {
+            // animation
+            toggleBounce(this);
             // set content
             infowindow.setContent('<h1> ' + name + ' </h1>' + '<p>' + fullAddress + '</p>');
             // open marker with content
@@ -133,6 +149,8 @@ function initMap() {
 
         return marker;
     }
+
+
 
 
     /* uses knockout.js */
@@ -147,6 +165,20 @@ function initMap() {
             self.locationList.push(place);
         });
 
+        // adds click to each list item:
+        self.click = function(location) {
+            // identifies the particular marker
+            var index = self.locationList.indexOf(location);
+            // bounces the marker
+            toggleBounce(markers[index]);
+            // pans to the marker
+            map.panTo(markers[index].position);
+            // opens info window
+            // open marker with content
+            infowindow.open(map, markers[index]);
+        };
+
+
         // filters places
         self.placeList = ko.computed(function() {
             var filter = self.searchTerm().toLowerCase();
@@ -155,7 +187,7 @@ function initMap() {
                 // restore all markers
                 markers.forEach(function(marker) {
                     return marker.setMap(map);
-                })
+                });
 
                 // reset the entire placeList
                 return self.locationList();
@@ -177,18 +209,18 @@ function initMap() {
     function setNewMarkers(markersArr) {
         // filter the markers 
         var filteredArr = markers.filter(function(marker) {
-            for(var i = 0; i < tempArr.length; i++) {
+            for (var i = 0; i < tempArr.length; i++) {
                 return tempArr[i].name === marker.title;
             }
-        })
+        });
         // clear all markers first
         markers.forEach(function(marker) {
             return marker.setMap(null);
-        })
+        });
         // recreate new markers from filtered arr
         return filteredArr.forEach(function(item) {
             return item.setMap(map);
-        })
+        });
     }
 }
 

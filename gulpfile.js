@@ -24,7 +24,7 @@ gulp.task('html', function() {
 gulp.task('js', function() {
     return gulp.src(folder.src + 'js/*.js')
             .pipe(stripedebug())
-            .pipe(uglify())
+            // .pipe(uglify()) // creates issues with jslint
             .pipe(gulp.dest(folder.build + 'js/'));
 });
 
