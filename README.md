@@ -8,9 +8,10 @@ Udacity Frontend Nanodegree project using various APIs and Knockout.js to create
 
 ## Getting Started
 
-- Checkout app on ![URL](http://www.danafng.com/neighborhood-map/)
-- Click on markers on the map for more information
-- Use search bar to filter map
+>1. Checkout app on ![URL](http://www.danafng.com/neighborhood-map/) or run locally `git clone https://github.com/riceball1/neighborhood-map` then drag the `index.html` file into your browser
+>2. Click on markers on the map for more information
+>3. Use search bar at top to filter map
+>4. Enjoy this simple map app!
 
 
 ## Technologies Used:
