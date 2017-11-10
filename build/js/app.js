@@ -36,20 +36,9 @@ var ViewModel = function() {
         self.locationList.push(place);
     });
 
-    // adds click to each list item:
-
-
+    // adds click to each list item
     self.click = function(location) {
         google.maps.event.trigger(location.marker, 'click');
-        // // identifies the particular marker
-        // var index = self.locationList.indexOf(location);
-        // // bounces the marker
-        // toggleBounce(markers[index]);
-        // // pans to the marker
-        // map.panTo(markers[index].position);
-        // // opens info window
-        // // open marker with content
-        // infowindow.open(map, markers[index]);
     };
 
     // filters places
