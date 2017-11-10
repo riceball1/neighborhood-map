@@ -11,8 +11,11 @@ Udacity Frontend Nanodegree project using various APIs and Knockout.js to create
 4. Enjoy this simple map app!
 
 ### How to Use Gulp Build Tool 
-
-- If you want to use the Gulp build tool, you just need to `cd` into the project folder and then run `gulp`, but it is only needed if you want to run any changes after modifying items in the `src` folder
+- You will need to have node/npm installed on your computer ![download node(https://nodejs.org/en/)
+- If you want to use the Gulp build tool:
+    - `cd` into the project folder 
+    - run `npm install` in your command line
+    - then run `gulp`, but it is only needed if you want to run any changes after modifying items in the `src` folder
 
 
 ## Technologies Used:
